@@ -20,8 +20,10 @@ WORKDIR /app
 COPY --from=build --chown=node:node /prod/api /app
 
 # Create a fake git repo so Cobalt doesn't crash on startup
-RUN mkdir -p /app/.git/refs/heads && \
+RUN mkdir -p /app/.git/refs/heads /app/.git/logs/refs/heads && \
     echo "ref: refs/heads/main" > /app/.git/HEAD && \
+    echo "0000000000000000000000000000000000000000 0000000000000000000000000000000000000000 nobody nobody@example.com 1700000000 +0000\tcommit (initial): fake" > /app/.git/logs/HEAD && \
+    echo "0000000000000000000000000000000000000000 0000000000000000000000000000000000000000 nobody nobody@example.com 1700000000 +0000\tcommit (initial): fake" > /app/.git/logs/refs/heads/main && \
     echo "0000000000000000000000000000000000000000" > /app/.git/refs/heads/main && \
     chown -R node:node /app/.git
 
